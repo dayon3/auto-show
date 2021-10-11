@@ -1,0 +1,44 @@
+{
+  "name": "auto-show",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dayon3/auto-show.git"
+  },
+  "author": "dayon3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dayon3/auto-show/issues"
+  },
+  "homepage": "https://github.com/dayon3/auto-show#readme",
+  "dependencies": {
+    "@auth0/nextjs-auth0": "^1.5.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/material": "^5.0.2",
+    "@mui/styles": "^5.0.1",
+    "cloudinary": "^1.27.0",
+    "cloudinary-build-url": "^0.2.1",
+    "cloudinary-react": "^1.7.0",
+    "date-fns": "^2.25.0",
+    "faunadb": "^4.4.1",
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.17.1",
+    "react-map-gl": "5",
+    "react-use": "^17.3.1",
+    "swr": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2"
+  }
+}

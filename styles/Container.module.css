@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0px;
+  z-index: 30;
+}
+
+@supports not (backdrop-filter: none) {
+  .header {
+    backdrop-filter: none;
+    background-color: antiquewhite;
+    opacity: 0.9;
+  }
+}
+
+.main {
+  background-color: #f2f5fa;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  /* padding-top: 2rem; */
+}

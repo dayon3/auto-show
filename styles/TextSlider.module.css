@@ -1,0 +1,46 @@
+.textSlider {
+  position: relative;
+  display: block;
+  text-align: center;
+  line-height: normal;
+}
+
+.textSpan {
+  position: absolute;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 1000ms;
+  color: rgba(31, 41, 55, 1);
+  font-size: 72px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.gradientSpan {
+  box-decoration-break: clone;
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  font-size: 72px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.fromGreenToBlue {
+  --tw-gradient-stops: #34d399, #3b82f6;
+}
+
+.fromPurpleViaPinkToRed {
+  --tw-gradient-stops: #a78bfa, #ec4899, #ef4444;
+}
+.fromYellowViaPinkToRed {
+  --tw-gradient-stops: #fbbf24, #ec4899, #ef4444;
+}
+
+.opacity0 {
+  opacity: 0;
+}
+.opacity100 {
+  opacity: 1;
+}
