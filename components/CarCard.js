@@ -30,7 +30,7 @@ const CarCard = ({ car }) => {
         cloudName: 'davisgitonga'
       },
       transformations: {
-        effect: 'blur.1000',
+        effect: 'blur:1000',
         quality: 1
       }
     });
@@ -39,8 +39,8 @@ const CarCard = ({ car }) => {
   return (
     <Link href={`/car/${car.id}`}>
       <a>
-        <Grid item sx={{ width: '336px', color: 'black', cursor: 'pointer' }}>
-          <Card sx={{ width: '310px' }}>
+        <Grid item sx={{ width: '336px', color: 'black', mb: '26px' }}>
+          <Card sx={{ width: '310px', position: 'relative' }}>
             <CardMedia>
               {car.data.images === undefined ? (
                 ''
@@ -66,8 +66,23 @@ const CarCard = ({ car }) => {
                 </Box>
               )}
             </CardMedia>
-            <CardContent>
-              <Typography gutterBottom variant="h6" component="h6">
+            <CardContent
+              sx={{
+                position: 'absolute',
+                bottom: '0',
+                left: '0',
+                right: '0',
+                background: 'linear-gradient(rgba(255, 255, 255, 0), #000)',
+                '&:last-child': {
+                  pb: '16px'
+                }
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h6"
+                sx={{ fontWeight: 'bold', color: 'white' }}
+              >
                 {`${car.data.make} ${car.data.model}`}
               </Typography>
             </CardContent>

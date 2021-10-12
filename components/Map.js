@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, { Marker } from 'react-map-gl';
+import Image from 'next/image';
 
-const MAPBOX_TOKEN =
-  'pk.eyJ1IjoiZGF2aXNnaXRvbmdhIiwiYSI6ImNrdW10cng2NTBuNnoyb3BmYWxwM3pua2gifQ.3C8VIDRfN1Xz3HIXX6DTbw';
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-export default function Map() {
+export default function Map({ lat, long }) {
   const [viewport, setViewport] = useState({
     width: '100%',
-    height: '500px',
-    latitude: 37.7577,
-    longitude: -122.4376,
+    height: '350px',
+    latitude: lat,
+    longitude: long,
     zoom: 13
   });
 
@@ -19,6 +19,12 @@ export default function Map() {
       mapboxApiAccessToken={MAPBOX_TOKEN}
       {...viewport}
       onViewportChange={(viewport) => setViewport(viewport)}
-    />
+    >
+      <Marker latitude={lat} longitude={long} offsetLeft={-20} offsetTop={-10}>
+        <span role="img" aria-label="push-pin">
+          <Image src="/map-pin.svg" alt="map pin" width={40} height={40} />
+        </span>
+      </Marker>
+    </ReactMapGL>
   );
 }

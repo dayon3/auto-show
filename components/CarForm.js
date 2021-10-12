@@ -1,14 +1,17 @@
 import NextImage from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { styled } from '@mui/material/styles';
 import { CloudinaryContext, Image, Transformation } from 'cloudinary-react';
+import AlertTitle from '@mui/material/AlertTitle';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
+import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -47,8 +50,13 @@ const ValidationError = ({ text }) => {
   );
 };
 
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function CarForm({ car }) {
   const [previewSources, setPreviewSources] = useState([]);
+  const [openToast, setOpenToast] = useState(false);
 
   const {
     register,
@@ -71,6 +79,8 @@ export default function CarForm({ car }) {
     try {
       // upload images to cloudinary
       const publicIds = await handleSubmitFile();
+      // show toast
+      setOpenToast(true);
       // create doc in fauna
       await fetch('/api/createCar', {
         method: 'POST',
@@ -133,6 +143,14 @@ export default function CarForm({ car }) {
     }
   };
 
+  const handleToastClose = (reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenToast(false);
+  };
+
   const handleFileInputChange = async (e) => {
     let files = [];
 
@@ -175,167 +193,184 @@ export default function CarForm({ car }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(car ? updateCar : createCar)}>
-      <Grid
-        container
-        direction="column"
-        sx={{ maxWidth: '768px', margin: '0 auto', p: '2rem' }}
-      >
-        <BootstrapTextField
-          placeholder="Car Make"
-          label="Make"
-          register={register}
+    <>
+      <form onSubmit={handleSubmit(car ? updateCar : createCar)}>
+        <Grid
+          container
+          direction="column"
+          sx={{ maxWidth: '768px', margin: '0 auto', p: '2rem' }}
         >
-          {errors.make && <ValidationError text="Make is required" />}
-        </BootstrapTextField>
-        <BootstrapTextField
-          placeholder="Car Model"
-          label="Model"
-          register={register}
-        >
-          {errors.model && <ValidationError text="Model is required" />}
-        </BootstrapTextField>
-        <BootstrapTextField
-          placeholder="Car Year"
-          label="Year"
-          register={register}
-        >
-          {errors.year && <ValidationError text="Year is required" />}
-        </BootstrapTextField>
-        <Grid item sx={{ mb: '1.5rem' }}>
-          <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
-            Description
-          </InputLabel>
-          <TextareaAutosize
-            aria-label="Description"
-            minRows={10}
-            placeholder="BMW announced the newest additions to the BMW i brand, the i4 eDrive40 and i4 M50 models."
-            style={{ width: '100%' }}
-            {...register('description', { required: true })}
-          />
-          {errors.description && (
-            <ValidationError text="Description is required" />
-          )}
-        </Grid>
-        <Grid item sx={{ mb: '1.5rem' }}>
-          <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
-            Showroom location
-          </InputLabel>
-          <Stack direction="row" spacing={6}>
-            <Stack sx={{ width: '100%' }}>
-              <TextField
-                label="Latitude"
-                variant="filled"
-                {...register('latitude', { required: true })}
-              />
-              {errors.latitude && (
-                <ValidationError text="Latitude is required" />
-              )}
-            </Stack>
-
-            <Stack sx={{ width: '100%' }}>
-              <TextField
-                label="Longitude"
-                variant="filled"
-                {...register('longitude', { required: true })}
-              />
-              {errors.longitude && (
-                <ValidationError text="Longitude is required" />
-              )}
-            </Stack>
-          </Stack>
-        </Grid>
-        {!car && (
-          <>
-            <Grid item sx={{ mb: '1.5rem' }}>
-              <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
-                Upload Images
-              </InputLabel>
-              <label htmlFor="icon-button-file">
-                <Input
-                  accept="image/*"
-                  id="icon-button-file"
-                  type="file"
-                  multiple
-                  onChange={handleFileInputChange}
-                  // {...register('images', { required: true })}
-                />
-                <Button
-                  variant="contained"
-                  component="span"
-                  startIcon={<PhotoCamera />}
-                >
-                  Choose Files
-                </Button>
-              </label>
-            </Grid>
-            <Grid item sx={{ mb: '1.5rem' }}>
-              <Stack direction="row" spacing={2}>
-                {previewSources &&
-                  previewSources.map((preview, index) => (
-                    <Stack key={index}>
-                      <NextImage
-                        src={preview}
-                        alt={`image-${index}-preview`}
-                        width={200}
-                        height={150}
-                      />
-                    </Stack>
-                  ))}
-              </Stack>
-            </Grid>
-          </>
-        )}
-        {car?.data.images && (
+          <BootstrapTextField
+            placeholder="Car Make"
+            label="Make"
+            register={register}
+          >
+            {errors.make && <ValidationError text="Make is required" />}
+          </BootstrapTextField>
+          <BootstrapTextField
+            placeholder="Car Model"
+            label="Model"
+            register={register}
+          >
+            {errors.model && <ValidationError text="Model is required" />}
+          </BootstrapTextField>
+          <BootstrapTextField
+            placeholder="Car Year"
+            label="Year"
+            register={register}
+          >
+            {errors.year && <ValidationError text="Year is required" />}
+          </BootstrapTextField>
           <Grid item sx={{ mb: '1.5rem' }}>
             <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
-              Uploaded Images
+              Description
             </InputLabel>
-            <CloudinaryContext cloudName="davisgitonga">
-              <Grid container spacing={2}>
-                {car.data.images.map((image, index) => (
-                  <Grid item key={index}>
-                    <Image
-                      key={index}
-                      publicId={image}
-                      alt={`${car.data.make}-${car.data.model}-${index}`}
-                    >
-                      <Transformation width="300" crop="scale" />
-                    </Image>
-                  </Grid>
-                ))}
-              </Grid>
-            </CloudinaryContext>
+            <TextareaAutosize
+              aria-label="Description"
+              minRows={10}
+              placeholder="BMW announced the newest additions to the BMW i brand, the i4 eDrive40 and i4 M50 models."
+              style={{ width: '100%' }}
+              {...register('description', { required: true })}
+            />
+            {errors.description && (
+              <ValidationError text="Description is required" />
+            )}
           </Grid>
-        )}
-        <Grid item>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ textTransform: 'none' }}
-          >
-            Save
-          </Button>
-          <Link href="/" passHref>
+          <Grid item sx={{ mb: '1.5rem' }}>
+            <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
+              Showroom location
+            </InputLabel>
+            <Stack direction="row" spacing={6}>
+              <Stack sx={{ width: '100%' }}>
+                <TextField
+                  label="Latitude"
+                  variant="filled"
+                  {...register('latitude', { required: true })}
+                />
+                {errors.latitude && (
+                  <ValidationError text="Latitude is required" />
+                )}
+              </Stack>
+
+              <Stack sx={{ width: '100%' }}>
+                <TextField
+                  label="Longitude"
+                  variant="filled"
+                  {...register('longitude', { required: true })}
+                />
+                {errors.longitude && (
+                  <ValidationError text="Longitude is required" />
+                )}
+              </Stack>
+            </Stack>
+          </Grid>
+          {!car && (
+            <>
+              <Grid item sx={{ mb: '1.5rem' }}>
+                <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
+                  Upload Images
+                </InputLabel>
+                <label htmlFor="icon-button-file">
+                  <Input
+                    accept="image/*"
+                    id="icon-button-file"
+                    type="file"
+                    multiple
+                    onChange={handleFileInputChange}
+                    // {...register('images', { required: true })}
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    startIcon={<PhotoCamera />}
+                  >
+                    Choose Files
+                  </Button>
+                </label>
+              </Grid>
+              <Grid item sx={{ mb: '1.5rem' }}>
+                <Stack direction="row" spacing={2}>
+                  {previewSources &&
+                    previewSources.map((preview, index) => (
+                      <Stack key={index}>
+                        <NextImage
+                          src={preview}
+                          alt={`image-${index}-preview`}
+                          width={200}
+                          height={150}
+                        />
+                      </Stack>
+                    ))}
+                </Stack>
+              </Grid>
+            </>
+          )}
+          {car?.data.images && (
+            <Grid item sx={{ mb: '1.5rem' }}>
+              <InputLabel sx={{ fontWeight: 'bold', mb: '.5rem' }}>
+                Uploaded Images
+              </InputLabel>
+              <CloudinaryContext cloudName="davisgitonga">
+                <Grid container spacing={2}>
+                  {car.data.images.map((image, index) => (
+                    <Grid item key={index}>
+                      <Image
+                        key={index}
+                        publicId={image}
+                        alt={`${car.data.make}-${car.data.model}-${index}`}
+                      >
+                        <Transformation width="300" crop="scale" />
+                      </Image>
+                    </Grid>
+                  ))}
+                </Grid>
+              </CloudinaryContext>
+            </Grid>
+          )}
+          <Grid item>
             <Button
+              type="submit"
               variant="contained"
-              color="secondary"
-              sx={{ textTransform: 'none', mx: '1rem' }}
+              sx={{ textTransform: 'none' }}
             >
-              Cancel
+              Save
             </Button>
-          </Link>
-          <Button
-            onClick={deleteCar}
-            variant="contained"
-            color="error"
-            sx={{ textTransform: 'none' }}
-          >
-            Delete
-          </Button>
+            <Link href="/" passHref>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ textTransform: 'none', mx: '1rem' }}
+              >
+                Cancel
+              </Button>
+            </Link>
+            <Button
+              onClick={deleteCar}
+              variant="contained"
+              color="error"
+              sx={{ textTransform: 'none' }}
+            >
+              Delete
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </form>
+      </form>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={openToast}
+        autoHideDuration={6000}
+        onClose={handleToastClose}
+      >
+        <Alert
+          onClose={handleToastClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          <AlertTitle>Success!</AlertTitle>
+          We&apos;ve added your auto show.
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
