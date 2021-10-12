@@ -2,7 +2,8 @@ import { useState } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import Image from 'next/image';
 
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+const MAPBOX_TOKEN =
+  'pk.eyJ1IjoiZGF2aXNnaXRvbmdhIiwiYSI6ImNrdW10cng2NTBuNnoyb3BmYWxwM3pua2gifQ.3C8VIDRfN1Xz3HIXX6DTbw';
 
 export default function Map({ lat, long }) {
   const [viewport, setViewport] = useState({
