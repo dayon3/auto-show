@@ -33,7 +33,7 @@ export default function Home() {
         </section>
 
         <section className={styles.main}>
-          <Grid container>
+          <Grid container justifyContent="center">
             {!cars && <GridSkeleton />}
             {cars && cars.map((car) => <CarCard key={car.id} car={car} />)}
           </Grid>
