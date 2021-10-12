@@ -1,8 +1,45 @@
-## Auto Show
+<img src="./public/logo.svg" alt="Logo" width="100" height="100" />
 
-Make a dummy car enthusiast website that involves the following:
-1. Have the capability for a user to sign-up and sign-in (username-password is fine, OAuth would be a +);
-2. Able to update their entry. An entry involves the following; car make, model, year, a few images of the car, and a map location for a showroom location where they take their car on weekends to display
-3. Ability to view other user's entries (all the details in (2) above except if the user is not logged-in, in which case they'll see the car details with a limited number of images — like 2, and they cannot see the location of the showroom).
-4. Have a chatting feature within the app that users can talk to each other.
+# Auto Show
 
+> A platform to showcase your cars.
+
+## Running Locally
+
+```bash
+$ git clone https://github.com/dayon3/auto-show.git
+$ cd auto-show
+$ yarn
+$ yarn dev
+```
+
+## Environment Variables
+
+```
+# FaunaDB
+FAUNA_SECRET=
+
+# Cloudinary
+CLOUDINARY_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# Auth0
+AUTH0_SECRET=
+AUTH0_BASE_URL=
+AUTH0_ISSUER_BASE_URL=
+AUTH0_CLIENT_ID=
+
+# Mapbox
+NEXT_PUBLIC_MAPBOX_TOKEN=
+```
+
+## Built Using
+
+- [Next.js](https://nextjs.org/)
+- [Vercel](https://vercel.com)
+- [Material UI (v5)](https://mui.com/)
+- [FaunaDB](https://fauna.com/)
+- [Cloudinary](https://cloudinary.com/)
+- [Auth0](https://auth0.com/)
+- [Mapbox](https://www.mapbox.com/)

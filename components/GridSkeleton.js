@@ -8,7 +8,7 @@ const CarSkeleton = () => (
       width={310}
       sx={{
         mx: 'auto',
-        height: '336px',
+        height: '232.5px',
         justifySelf: 'stretch',
         borderRadius: '0.375rem'
       }}

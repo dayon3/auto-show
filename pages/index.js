@@ -23,7 +23,6 @@ export default function Home() {
               variant="body1"
               color="text.secondary"
               sx={{
-                // fontStyle: 'italic',
                 fontSize: '1.4rem',
                 mt: '1.5rem'
               }}
@@ -34,7 +33,7 @@ export default function Home() {
         </section>
 
         <section className={styles.main}>
-          <Grid container spacing={2} justifyContent="center">
+          <Grid container>
             {!cars && <GridSkeleton />}
             {cars && cars.map((car) => <CarCard key={car.id} car={car} />)}
           </Grid>

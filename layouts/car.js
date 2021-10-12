@@ -9,9 +9,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import Container from '@/components/Container';
+import LocationSkeleton from '@/components/LocationSkeleton';
 
 const Map = dynamic(() => import('@/components/Map'), {
-  loading: () => 'Loading...',
+  loading: () => <LocationSkeleton />,
   ssr: false
 });
 
@@ -67,23 +68,119 @@ export default function CarLayout({ car }) {
               </Link>
             )}
           </Stack>
-          <CloudinaryContext cloudName="davisgitonga">
+          <CloudinaryContext cloudName="davisgitonga" secure>
             <Grid container spacing={2} justifyContent="center">
-              {car.data.images.map((image, index) => (
-                <Grid item key={index}>
-                  <Image
-                    publicId={image}
-                    alt={`${car.data.make}-${car.data.model}-${index}`}
+              {user &&
+                car.data.images.map((image, index) => (
+                  <Grid item key={index}>
+                    <Image
+                      publicId={image}
+                      alt={`${car.data.make}-${car.data.model}-${index}`}
+                    >
+                      <Transformation width="300" crop="scale" />
+                    </Image>
+                  </Grid>
+                ))}
+              {!user &&
+                car.data.images.slice(0, 2).map((image, index) => (
+                  <Grid item key={index}>
+                    <Image
+                      publicId={image}
+                      alt={`${car.data.make}-${car.data.model}-${index}`}
+                    >
+                      <Transformation width="300" crop="scale" />
+                    </Image>
+                  </Grid>
+                ))}
+              {!user && (
+                <Grid
+                  item
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '300px'
+                  }}
+                >
+                  <Typography
+                    variant="p"
+                    component="p"
+                    sx={{
+                      fontWeight: 'bold',
+                      fontStyle: 'italic',
+                      color: '#1976d2'
+                    }}
                   >
-                    <Transformation width="300" crop="scale" />
-                  </Image>
+                    Login to load more images.
+                  </Typography>
                 </Grid>
-              ))}
+              )}
             </Grid>
           </CloudinaryContext>
-          <Box sx={{ py: '2rem' }}>
-            <Map />
+          <Box sx={{ py: '2rem', width: '100%' }}>
+            <Typography
+              align="left"
+              gutterBottom
+              variant="h6"
+              component="h6"
+              sx={{ fontWeight: 'bold', pb: '1rem' }}
+            >
+              Description
+            </Typography>
+            <Typography
+              align="left"
+              gutterBottom
+              variant="p"
+              component="p"
+              sx={{ pb: '1rem' }}
+            >
+              {car.data.description}
+            </Typography>
           </Box>
+          {!user && (
+            <>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: '100px',
+                  width: '100%',
+                  mt: '-150px',
+                  background: 'linear-gradient(rgba(255, 255, 255, 0), #f2f5fa)'
+                }}
+              ></Box>
+              <Box sx={{ py: '3rem' }}>
+                <Typography
+                  align="left"
+                  variant="p"
+                  component="p"
+                  sx={{
+                    fontWeight: 'bold',
+                    fontStyle: 'italic',
+                    color: '#1976d2'
+                  }}
+                >
+                  Login to show more details.
+                </Typography>
+              </Box>
+            </>
+          )}
+          {user && (
+            <Box sx={{ pb: '2rem', width: '100%' }}>
+              <Typography
+                align="left"
+                gutterBottom
+                variant="h6"
+                component="h6"
+                sx={{ fontWeight: 'bold', pb: '1rem' }}
+              >
+                Showroom Location
+              </Typography>
+              <Map
+                lat={parseFloat(car.data.location.latitude)}
+                long={parseFloat(car.data.location.longitude)}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </Container>

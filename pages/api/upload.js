@@ -24,3 +24,11 @@ export default async function handler(req, res) {
     res.status(500).json({ msg: 'Something went wrong.' });
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '5mb'
+    }
+  }
+};

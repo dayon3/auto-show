@@ -23,7 +23,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           <link
-            href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css"
+            href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
             rel="stylesheet"
           />
         </Head>
